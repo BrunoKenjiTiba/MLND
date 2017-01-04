@@ -11859,7 +11859,7 @@ div#notebook {
 <span class="n">n_students</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_data</span><span class="p">)</span>
 
 <span class="c1"># TODO: Calculate number of features</span>
-<span class="n">n_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">n_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_data</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
 <span class="c1"># TODO: Calculate passing students</span>
 <span class="n">n_passed</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_data</span><span class="p">[</span><span class="n">student_data</span><span class="p">[</span><span class="s1">&#39;passed&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">])</span>
@@ -11889,7 +11889,7 @@ div#notebook {
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Total number of students: 395
-Number of features: 31
+Number of features: 30
 Number of students who passed: 265
 Number of students who failed: 130
 Graduation rate of the class: 67.09%
@@ -12305,9 +12305,9 @@ Testing set has 95 samples.
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">ensemble</span>
 
 <span class="c1"># TODO: Initialize the three models</span>
-<span class="n">clf_A</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">()</span>
-<span class="n">clf_B</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">AdaBoostClassifier</span><span class="p">()</span>
-<span class="n">clf_C</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestClassifier</span><span class="p">()</span>
+<span class="n">clf_A</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">clf_B</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">AdaBoostClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">clf_C</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="c1"># TODO: Set up the training set sizes</span>
 <span class="n">X_train_100</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">100</span><span class="p">]</span>
@@ -12335,6 +12335,9 @@ Testing set has 95 samples.
 <span class="n">train_predict</span><span class="p">(</span><span class="n">clf_C</span><span class="p">,</span> <span class="n">X_train_100</span><span class="p">,</span> <span class="n">y_train_100</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
 <span class="n">train_predict</span><span class="p">(</span><span class="n">clf_C</span><span class="p">,</span> <span class="n">X_train_200</span><span class="p">,</span> <span class="n">y_train_200</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
 <span class="n">train_predict</span><span class="p">(</span><span class="n">clf_C</span><span class="p">,</span> <span class="n">X_train_300</span><span class="p">,</span> <span class="n">y_train_300</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;#######################  Benchmark #######################&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s2">&quot;F1 score for predicting all </span><span class="se">\&quot;</span><span class="s2">yes</span><span class="se">\&quot;</span><span class="s2"> on test set: {:.4f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;yes&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span> <span class="n">pos_label</span><span class="o">=</span><span class="s1">&#39;yes&#39;</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">))</span>
 </pre></div>
 
 </div>
@@ -12349,61 +12352,63 @@ Testing set has 95 samples.
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>##################### Classifier A #####################
 Training a SVC using a training set size of 100. . .
-Trained model in 0.0100 seconds
-Made predictions in 0.0020 seconds.
+Trained model in 0.0030 seconds
+Made predictions in 0.0010 seconds.
 F1 score for training set: 0.8777.
 Made predictions in 0.0010 seconds.
 F1 score for test set: 0.7746.
 Training a SVC using a training set size of 200. . .
-Trained model in 0.0060 seconds
+Trained model in 0.0050 seconds
 Made predictions in 0.0030 seconds.
 F1 score for training set: 0.8679.
-Made predictions in 0.0030 seconds.
+Made predictions in 0.0020 seconds.
 F1 score for test set: 0.7815.
 Training a SVC using a training set size of 300. . .
-Trained model in 0.0100 seconds
+Trained model in 0.0090 seconds
 Made predictions in 0.0060 seconds.
 F1 score for training set: 0.8761.
 Made predictions in 0.0020 seconds.
 F1 score for test set: 0.7838.
 #####################  Classifier B #####################
 Training a AdaBoostClassifier using a training set size of 100. . .
-Trained model in 0.1190 seconds
-Made predictions in 0.0060 seconds.
+Trained model in 0.1130 seconds
+Made predictions in 0.0050 seconds.
 F1 score for training set: 0.9481.
-Made predictions in 0.0060 seconds.
+Made predictions in 0.0050 seconds.
 F1 score for test set: 0.7669.
 Training a AdaBoostClassifier using a training set size of 200. . .
-Trained model in 0.1360 seconds
-Made predictions in 0.0080 seconds.
-F1 score for training set: 0.8927.
+Trained model in 0.1110 seconds
 Made predictions in 0.0060 seconds.
+F1 score for training set: 0.8927.
+Made predictions in 0.0050 seconds.
 F1 score for test set: 0.8281.
 Training a AdaBoostClassifier using a training set size of 300. . .
-Trained model in 0.1220 seconds
-Made predictions in 0.0080 seconds.
+Trained model in 0.1070 seconds
+Made predictions in 0.0070 seconds.
 F1 score for training set: 0.8637.
-Made predictions in 0.0060 seconds.
+Made predictions in 0.0050 seconds.
 F1 score for test set: 0.7820.
 #####################  Classifier C #####################
 Training a RandomForestClassifier using a training set size of 100. . .
-Trained model in 0.0240 seconds
+Trained model in 0.0210 seconds
 Made predictions in 0.0010 seconds.
-F1 score for training set: 0.9922.
+F1 score for training set: 0.9844.
 Made predictions in 0.0010 seconds.
-F1 score for test set: 0.7218.
+F1 score for test set: 0.7153.
 Training a RandomForestClassifier using a training set size of 200. . .
-Trained model in 0.0270 seconds
+Trained model in 0.0220 seconds
 Made predictions in 0.0010 seconds.
 F1 score for training set: 0.9964.
 Made predictions in 0.0010 seconds.
-F1 score for test set: 0.7015.
+F1 score for test set: 0.7857.
 Training a RandomForestClassifier using a training set size of 300. . .
-Trained model in 0.0340 seconds
+Trained model in 0.0220 seconds
 Made predictions in 0.0020 seconds.
 F1 score for training set: 0.9951.
 Made predictions in 0.0010 seconds.
-F1 score for test set: 0.7770.
+F1 score for test set: 0.8092.
+#######################  Benchmark #######################
+F1 score for predicting all &#34;yes&#34; on test set: 0.7742
 </pre>
 </div>
 </div>
@@ -12440,21 +12445,21 @@ F1 score for test set: 0.7770.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0100</td>
-<td style="text-align:center">0.0010</td>
+<td style="text-align:center">0.0030</td>
+<td style="text-align:center">0.0020</td>
 <td style="text-align:center">0.8777</td>
 <td style="text-align:center">0.7746</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0060</td>
+<td style="text-align:center">0.0090</td>
 <td style="text-align:center">0.0030</td>
 <td style="text-align:center">0.8679</td>
 <td style="text-align:center">0.7815</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0100</td>
+<td style="text-align:center">0.0160</td>
 <td style="text-align:center">0.0020</td>
 <td style="text-align:center">0.8761</td>
 <td style="text-align:center">0.7838</td>
@@ -12474,22 +12479,22 @@ F1 score for test set: 0.7770.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.1190</td>
-<td style="text-align:center">0.0060</td>
+<td style="text-align:center">0.3450</td>
+<td style="text-align:center">0.0080</td>
 <td style="text-align:center">0.9481</td>
 <td style="text-align:center">0.7669</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.1360</td>
-<td style="text-align:center">0.0060</td>
+<td style="text-align:center">0.1440</td>
+<td style="text-align:center">0.0050</td>
 <td style="text-align:center">0.8927</td>
 <td style="text-align:center">0.8281</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.1220</td>
-<td style="text-align:center">0.0060</td>
+<td style="text-align:center">0.1180</td>
+<td style="text-align:center">0.0050</td>
 <td style="text-align:center">0.8637</td>
 <td style="text-align:center">0.7820</td>
 </tr>
@@ -12508,24 +12513,24 @@ F1 score for test set: 0.7770.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0240</td>
-<td style="text-align:center">0.0010</td>
-<td style="text-align:center">0.9922</td>
-<td style="text-align:center">0.7218</td>
+<td style="text-align:center">0.0660</td>
+<td style="text-align:center">0.0020</td>
+<td style="text-align:center">0.9844</td>
+<td style="text-align:center">0.7153</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0270</td>
+<td style="text-align:center">0.0290</td>
 <td style="text-align:center">0.0010</td>
 <td style="text-align:center">0.9964</td>
-<td style="text-align:center">0.7015</td>
+<td style="text-align:center">0.7857</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0340</td>
+<td style="text-align:center">0.0290</td>
 <td style="text-align:center">0.0010</td>
 <td style="text-align:center">0.9951</td>
-<td style="text-align:center">0.7770</td>
+<td style="text-align:center">0.8092</td>
 </tr>
 </tbody>
 </table>
@@ -12558,9 +12563,9 @@ F1 score for test set: 0.7770.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong> The algorithms that performed better in the experiments were SVM and AdaBoost. They performance were similar, but the training times of AdaBoost was one order of magnitude longer than the SVM ones. The prediction times of SVM alse were shorter than the AdaBoost ones.</p>
+<p><strong>Answer: </strong> The algorithms that performed better in the experiments were SVM and AdaBoost. They performance were similar, but the training times of AdaBoost were one order of magnitude longer than the SVM ones. The prediction times of SVM alse were shorter than the AdaBoost ones.</p>
 <p>Another advantage of SVM over AdaBoost is that SVM is based on an optimization problem, that focuses on finding the optimal value for a problem. On the other hand, AdaBoost has a more greedy approach, with the risk of getting stuck on a local optimal point. Both have the advantage of being resistant to overfitting.</p>
-<p>Therefore, with the results of the experiment for this dataset, I'd say that the SSVM is the most adequate model for this problem.</p>
+<p>Therefore, with the results of the experiment for this dataset, I'd say that the SVM is the most adequate model for this problem.</p>
 
 </div>
 </div>
@@ -12580,8 +12585,11 @@ F1 score for test set: 0.7770.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong> Most of the classification algorithms are based on finding the best way to split the dataset into different groups. The Support Vector Machines do that trying to maximize the border between the data from the learning set and the divisory boundary.</p>
-<p>Some advantages of SVM is that it tends to classify data that it has not seen very well, without relying too much on the data that it has seen. It is also able to explore the data relationship better than other algorithms with a technique called Kernel Trick.</p>
+<p><strong>Answer: </strong> Most of the classification algorithms are based on finding the best boundary that splits of the data, the students in this case, in different groups. The Support Vector Machine would do that by analyzing the students data (age, gender, etc.) to find a boundary that separates the students that passed from the ones that didn't. The SVM chooses a boundary that has the maximum margin between the boundary and the students data. The intuitive reasoning for that is that it allows the classification to accomodate small mistakes and variations in the data.</p>
+<p><img src="https://udacity-github-sync-content.s3.amazonaws.com/_imgs/19273/1468014011/optimal-hyperplane.png" alt="alt text" title="Example of a SVM splitting data"></p>
+<p>There are cases where drawing a simple line isn't enough to separate the data in a satisfatory way. The SVM is able to overcome this situation by "lifting" the data into higher dimensions, a technique called Kernel Trick. After "lifting" the data, the SVM is able to use a plane to split the data in a similar fashion as it would do in the 2D case using a line.</p>
+<p><img src="https://udacity-github-sync-content.s3.amazonaws.com/_imgs/19273/1464624531/1gvce.png" alt="alt text" title="A Kernel Trick representation"></p>
+<p>After deciding what is the best boundary to use, the SVM can be used to classify the data. In our case, it would look at the new student data and see if the student would fall into the passed side of the boundary or in the other side.</p>
 
 </div>
 </div>
@@ -12612,15 +12620,20 @@ F1 score for test set: 0.7770.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import &#39;GridSearchCV&#39; and &#39;make_scorer&#39;</span>
 <span class="kn">from</span> <span class="nn">sklearn.grid_search</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_scorer</span><span class="p">,</span> <span class="n">f1_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">normalize</span>
+
+<span class="c1"># Normalizing data</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
 <span class="c1"># TODO: Create the parameters list you wish to tune</span>
-<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">),</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">]}</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">),</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span> <span class="p">,</span><span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">]}</span>
 
 <span class="c1"># TODO: Initialize the classifier</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -12629,13 +12642,14 @@ F1 score for test set: 0.7770.
 <span class="n">f1_scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">f1_score</span><span class="p">,</span> <span class="n">pos_label</span><span class="o">=</span><span class="s2">&quot;yes&quot;</span><span class="p">)</span>
 
 <span class="c1"># TODO: Perform grid search on the classifier using the f1_scorer as the scoring method</span>
-<span class="n">grid_obj</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">f1_scorer</span><span class="p">)</span>
+<span class="n">grid_obj</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">f1_scorer</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="c1"># TODO: Fit the grid search object to the training data and find the optimal parameters</span>
 <span class="n">grid_obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
 <span class="c1"># Get the estimator</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">grid_obj</span><span class="o">.</span><span class="n">best_estimator_</span>
+<span class="k">print</span> <span class="s2">&quot;Best params: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">grid_obj</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 
 <span class="c1"># Report the final F1 score for training and testing after parameter tuning</span>
 <span class="k">print</span> <span class="s2">&quot;Tuned model has a training F1 score of {:.4f}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">predict_labels</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
@@ -12652,10 +12666,11 @@ F1 score for test set: 0.7770.
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Made predictions in 0.0030 seconds.
-Tuned model has a training F1 score of 0.8620.
-Made predictions in 0.0010 seconds.
-Tuned model has a testing F1 score of 0.7891.
+<pre>Best params: {&#39;kernel&#39;: &#39;rbf&#39;, &#39;C&#39;: 100, &#39;gamma&#39;: 0.1}
+Made predictions in 0.0000 seconds.
+Tuned model has a training F1 score of 0.8412.
+Made predictions in 0.0000 seconds.
+Tuned model has a testing F1 score of 0.8169.
 </pre>
 </div>
 </div>
@@ -12679,8 +12694,8 @@ Tuned model has a testing F1 score of 0.7891.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong> The final F<sub>1</sub> score for training was 0.8620 and the testing one was 0.7891.</p>
-<p>The results are similar to the untuned model. Since the results for the untuned model were obtained using a simple split in the data set, while in the tuning process the scoring used cross validation, the final score is good, as the results from cross validation tend to reflect better real data.</p>
+<p><strong>Answer: </strong> The final F<sub>1</sub> score for training was 0.8412 and the testing one was 0.8169.</p>
+<p>The scores are slightly better than the untuned model ones. Since the results for the untuned model were obtained using a simple split in the data set, while in the tuning process the scoring used cross validation, the final score is good, as the results from cross validation tend to reflect better real data.</p>
 
 </div>
 </div>
